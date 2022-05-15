@@ -70,5 +70,44 @@ plt.title("Spending Scores")
 plt.xlabel("Score")
 plt.ylabel("Number of Customer Having the Score")
 plt.show()
+ai0_30 = df["Annual Income (k$)"][(df["Annual Income (k$)"] >= 1) & (df["Annual Income (k$)"] <= 30)]
+ai31_60 = df["Annual Income (k$)"][(df["Annual Income (k$)"] >= 31) & (df["Annual Income (k$)"] <= 60)]
+ai61_90 = df["Annual Income (k$)"][(df["Annual Income (k$)"] >= 61) & (df["Annual Income (k$)"] <= 90)]
+ai91_120 = df["Annual Income (k$)"][(df["Annual Income (k$)"] >= 91) & (df["Annual Income (k$)"] <= 120)]
+ai121_150 = df["Annual Income (k$)"][(df["Annual Income (k$)"] >= 121) & (df["Annual Income (k$)"] <= 150)]
 
+aix = ["$ 0 - 30,000","$ 30,001 - 60,000","$ 60,001 - 90,000","$ 90,001 - 120,000","$ 120,001 - 150,000",]
+aiy = [len(ai0_30.values), len(ai31_60.values), len(ai61_90.values), len(ai91_120.values), len(ai121_150.values)]
+
+plt.figure(figsize=(15,6))
+sns.barplot(x=aix, y=aiy, palette="Spectral")
+plt.title("Annual Incomes")
+plt.xlabel("Income")
+plt.ylabel("Number of Customer")
+plt.show()
+Choosing the number of clusters
+X1=df.loc[:, ["Age","Spending Score (1-100)"]].values          #finding wcss value for different number of clusters
+
+from sklearn.cluster import KMeans
+wcss = []
+for k in range(1, 11):
+  kmeans = KMeans(n_clusters=k, init="k-means++")
+  kmeans.fit(X1)
+  wcss.append(kmeans.inertia_)
+plt.figure(figsize=(12,6))
+plt.grid()
+plt.plot(range(1,11),wcss, linewidth=2, color="red", marker ="8")
+plt.xlabel("K Value")
+plt.ylabel("WCSS")
+plt.show()
+Training the k-means clustering model
+from sklearn.model_selection import train_test_split
+kmeans = KMeans(n_clusters=4)
+
+label = kmeans.fit_predict(X1)
+
+print(label)
+print(kmeans.cluster_centers_)
+X1_train, X1_test = train_test_split(X1, test_size=0.2, random_state=2)
+print(x1.shape, X1_train.shape, X1_test.shape)
 
